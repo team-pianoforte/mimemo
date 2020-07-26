@@ -1,5 +1,5 @@
 <template>
-  <div class="home">
+  <div class="home" style="margin-top: 256px">
     HOME
 
     <div v-if="loggedIn">
