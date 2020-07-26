@@ -1,14 +1,21 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Home from '../views/Home.vue'
+import DefaultLayout from '@/layouts/default.vue'
 
 Vue.use(VueRouter)
 
 const routes = [
   {
     path: '/',
-    name: 'Home',
-    component: Home,
+    name: 'DefaultLayout',
+    component: DefaultLayout,
+    children: [
+      {
+        path: ':id',
+        name: 'Home',
+        component: DefaultLayout,
+      },
+    ],
   },
 ]
 
@@ -17,5 +24,4 @@ const router = new VueRouter({
   base: process.env.BASE_URL,
   routes,
 })
-
 export default router
