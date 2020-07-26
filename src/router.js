@@ -4,6 +4,7 @@ import DefaultLayout from '@/layouts/default.vue'
 
 Vue.use(VueRouter)
 
+import Home from './views/Home.vue'
 const routes = [
   {
     path: '/',
@@ -13,7 +14,7 @@ const routes = [
       {
         path: ':id',
         name: 'Home',
-        component: DefaultLayout,
+        component: Home,
       },
     ],
   },

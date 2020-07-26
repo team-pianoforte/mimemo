@@ -1,5 +1,5 @@
 <template>
-  <div class="home" style="margin-top: 256px">
+  <div>
     HOME
 
     <div v-if="loggedIn">
@@ -21,9 +21,6 @@ export default {
   computed: {
     ...mapGetters('auth', ['loggedIn']),
     ...mapState('auth', ['user']),
-  },
-  async mounted() {
-    await this.signInAnonymously()
   },
 }
 </script>

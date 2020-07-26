@@ -1,7 +1,10 @@
 <template>
   <div>
     <Toolbar />
-    <router-view />
+    <div class="content">
+      h
+      <router-view />
+    </div>
   </div>
 </template>
 
@@ -12,3 +15,9 @@ export default {
   components: { Toolbar },
 }
 </script>
+
+<style scoped>
+.content {
+  margin-top: 64px;
+}
+</style>
