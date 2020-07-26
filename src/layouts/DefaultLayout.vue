@@ -1,11 +1,12 @@
 <template>
-  <div>
+  <v-app>
     <Toolbar />
-    <div class="content">
-      h
-      <router-view />
-    </div>
-  </div>
+    <v-main>
+      <v-container class="content">
+        <router-view />
+      </v-container>
+    </v-main>
+  </v-app>
 </template>
 
 <script>
