@@ -8,7 +8,7 @@
     "lint": "vue-cli-service lint",
     "dev": "npm run serve",
     "firebase": "firebase",
-    "test": "vue-cli-service test:unit"
+    "test": "vue-cli-service test:unit --passWithNoTests"
   },
   "dependencies": {
     "core-js": "^3.6.5",
