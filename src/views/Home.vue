@@ -1,26 +1,17 @@
 <template>
   <div>
-    HOME
-
-    <div v-if="loggedIn">
-      {{ user }}
-    </div>
-    <div v-else>
-      logging in
-    </div>
+    <MemoBoard />
+    <v-btn fixed fab right bottom color="primary" class="mb-8 mr-8">
+      <v-icon>mdi-clipboard-plus-outline</v-icon>
+    </v-btn>
   </div>
 </template>
 
 <script>
-import { mapActions, mapGetters, mapState } from 'vuex'
+import MemoBoard from '@/components/MemoBoard.vue'
+
 export default {
   name: 'Home',
-  methods: {
-    ...mapActions('auth', ['signInAnonymously']),
-  },
-  computed: {
-    ...mapGetters('auth', ['loggedIn']),
-    ...mapState('auth', ['user']),
-  },
+  components: { MemoBoard },
 }
 </script>
