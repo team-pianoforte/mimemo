@@ -21,20 +21,41 @@
           <v-divider v-if="i + 1 < memos.length" />
         </v-touch>
       </template>
+      <v-snackbar v-model="snackbar">
+        <p class="text-center ma-0">
+          {{ message }}
+        </p>
+      </v-snackbar>
     </v-card>
   </v-row>
 </template>
 
 <script>
+const messages = [
+  'おつかれさまでした',
+  'ご苦労さまでした',
+  '一歩前進ですね',
+  'この少しの一歩が、大きな成果への道かもしれませんよ',
+  '焦らず無理せずやっていきましょう',
+  'こつこつ頑張るあなたはえらい！',
+]
+
 export default {
   name: 'MemoBoard',
   data: () => ({
     memos: [{ id: 'a', text: 'a' }, { id: 'b', text: 'b' }],
     focusedId: null,
+    snackbar: false,
+    message: '',
   }),
   methods: {
     done(memo) {
       this.memos = this.memos.filter((v) => v.id !== memo.id)
+      this.showMessage()
+    },
+    showMessage() {
+      this.message = messages[Math.floor(Math.random() * messages.length)]
+      this.snackbar = true
     },
   },
 }
