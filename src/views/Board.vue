@@ -1,6 +1,11 @@
 <template>
   <div>
-    <MemoBoard :board="board" :memos="memos" @change="updateMemo" @done="removeMemo" />
+    <MemoBoard
+      :board="board"
+      :memos="memos"
+      @change="updateMemo"
+      @done="removeMemo"
+    />
     {{ memos }}
     <v-btn
       fixed
@@ -17,7 +22,7 @@
 </template>
 
 <script>
-import { db } from '@/firebase'
+import { db, Timestamp } from '@/firebase'
 import MemoBoard from '@/components/MemoBoard.vue'
 
 export default {
@@ -33,12 +38,6 @@ export default {
     board: null,
     memos: [],
   }),
-  watch: {
-    id() { this.rebind() },
-  },
-  async created() {
-    this.rebind()
-  },
   computed: {
     boardRef() {
       return db.collection('boards').doc(this.id)
@@ -46,6 +45,12 @@ export default {
     memosRef() {
       return this.boardRef.collection('memos')
     },
+  },
+  watch: {
+    id() { this.rebind() },
+  },
+  async created() {
+    this.rebind()
   },
   methods: {
     async clickCreateButton() {
@@ -56,14 +61,21 @@ export default {
       await this.$bind('memos', this.memosRef)
     },
     async createMemo({ text }) {
-      const ref = await this.memosRef.add({ text })
+      const ref = await this.memosRef.add({
+        text,
+        createdAt: Timestamp.now(),
+        updatedAt: Timestamp.now(),
+      })
       await ref.update({ id: ref.id })
     },
     async removeMemo(memo) {
       await this.memosRef.doc(memo.id).delete()
     },
     async updateMemo({ id, text }) {
-      await this.memosRef.doc(id).update({ text })
+      await this.memosRef.doc(id).update({
+        text,
+        updatedAt: Timestamp.now(),
+      })
     },
   },
 }

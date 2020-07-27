@@ -18,10 +18,10 @@
             <v-list-item-content>
               <v-text-field
                 :value="memo.text"
-                @input="change(memo, $event)"
                 hide-details
                 solo
                 flat
+                @input="change(memo, $event)"
                 @focus="focusedId = memo.id"
                 @blur="focusedId = null"
               />
