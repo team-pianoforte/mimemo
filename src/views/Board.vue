@@ -20,8 +20,6 @@
 import { db } from '@/firebase'
 import MemoBoard from '@/components/MemoBoard.vue'
 
-const memos = db.collection('memos')
-
 export default {
   name: 'Board',
   components: { MemoBoard },
@@ -45,6 +43,9 @@ export default {
     boardRef() {
       return db.collection('boards').doc(this.id)
     },
+    memosRef() {
+      return this.boardRef.collection('memos')
+    },
   },
   methods: {
     async clickCreateButton() {
@@ -52,17 +53,17 @@ export default {
     },
     async rebind() {
       await this.$bind('board', this.boardRef)
-      await this.$bind('memos', memos.where('board', '==', this.boardRef))
+      await this.$bind('memos', this.memosRef)
     },
     async createMemo({ text }) {
-      const ref = await memos.add({ text, board: this.boardRef })
+      const ref = await this.memosRef.add({ text })
       await ref.update({ id: ref.id })
     },
     async removeMemo(memo) {
-      await memos.doc(memo.id).delete()
+      await this.memosRef.doc(memo.id).delete()
     },
     async updateMemo({ id, text }) {
-      await memos.doc(id).update({ text })
+      await this.memosRef.doc(id).update({ text })
     },
   },
 }
