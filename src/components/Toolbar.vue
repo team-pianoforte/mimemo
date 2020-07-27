@@ -8,7 +8,10 @@
     <v-toolbar-title>みめも</v-toolbar-title>
     <v-spacer />
 
-    <v-btn icon v-if="loggedIn">
+    <v-btn
+      v-if="loggedIn"
+      icon
+    >
       <v-icon>mdi-account</v-icon>
     </v-btn>
   </v-app-bar>

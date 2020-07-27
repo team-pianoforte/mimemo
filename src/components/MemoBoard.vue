@@ -1,19 +1,36 @@
 <template>
-  <v-row class="px-16" justify="center" align="center">
-    <v-card max-width="800" class="flex-grow-1">
+  <v-row
+    class="px-16"
+    justify="center"
+    align="center"
+  >
+    <v-card
+      max-width="800"
+      class="flex-grow-1"
+    >
       <template v-for="(memo, i) in memos">
-        <v-touch :key="memo.id" @swipeleft="done(memo)" @swiperight="done(memo)">
+        <v-touch
+          :key="memo.id"
+          @swipeleft="done(memo)"
+          @swiperight="done(memo)"
+        >
           <v-list-item>
             <v-list-item-content>
               <v-text-field
-                hide-details solo flat
                 v-model="memo.text"
+                hide-details
+                solo
+                flat
                 @focus="focusedId = memo.id"
                 @blur="focusedId = null"
               />
             </v-list-item-content>
             <v-list-item-icon>
-              <v-btn icon color="green" @click="done(memo)">
+              <v-btn
+                icon
+                color="green"
+                @click="done(memo)"
+              >
                 <v-icon>mdi-check-bold</v-icon>
               </v-btn>
             </v-list-item-icon>
