@@ -1,10 +1,10 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import DefaultLayout from '@/layouts/DefaultLayout.vue'
+import Board from './views/Board.vue'
 
 Vue.use(VueRouter)
 
-import Home from './views/Home.vue'
 const routes = [
   {
     path: '/',
@@ -14,7 +14,8 @@ const routes = [
       {
         path: ':id',
         name: 'Home',
-        component: Home,
+        component: Board,
+        props: true,
       },
     ],
   },

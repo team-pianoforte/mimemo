@@ -17,7 +17,8 @@
           <v-list-item>
             <v-list-item-content>
               <v-text-field
-                v-model="memo.text"
+                :value="memo.text"
+                @input="change(memo, $event)"
                 hide-details
                 solo
                 flat
@@ -59,16 +60,24 @@ const messages = [
 
 export default {
   name: 'MemoBoard',
+  props: {
+    memos: {
+      type: Array,
+      required: true,
+    },
+  },
   data: () => ({
-    memos: [{ id: 'a', text: 'a' }, { id: 'b', text: 'b' }],
     focusedId: null,
     snackbar: false,
     message: '',
   }),
   methods: {
     done(memo) {
-      this.memos = this.memos.filter((v) => v.id !== memo.id)
+      this.$emit('done', memo)
       this.showMessage()
+    },
+    change(memo, text) {
+      this.$emit('change', { ...memo, text })
     },
     showMessage() {
       this.message = messages[Math.floor(Math.random() * messages.length)]
