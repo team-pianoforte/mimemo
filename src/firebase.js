@@ -23,12 +23,17 @@ const config = {
 firebase.initializeApp(config)
 firebase.analytics()
 
-export const db = firebase.firestore()
+export const firestore = firebase.firestore()
 export const auth = firebase.auth()
 export const Timestamp = firebase.firestore.Timestamp
 
-export const refKeys = {
-  boards: 'boards',
-  memos: 'memos',
-  users: 'users',
+
+const boards = firestore.collection('boards')
+const memos = (boardRef) => boardRef.collection('memos')
+const users = firestore.collection('users')
+
+export const db = {
+  boards,
+  memos,
+  users,
 }

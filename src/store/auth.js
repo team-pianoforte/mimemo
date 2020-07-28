@@ -1,4 +1,4 @@
-import { auth, db, refKeys } from '@/firebase'
+import { auth, db } from '@/firebase'
 import { SignInError } from '@/errors'
 
 export const namespaced = true
@@ -33,7 +33,7 @@ const newAuthUser = ({ uid }) => ({
 export const actions = {
   async changeUser({ commit, state }, user) {
     const { uid } = user
-    const ref = db.collection(refKeys.users).doc(uid)
+    const ref = db.users.doc(uid)
 
     if (!ref.get().exists) {
       await ref.set(newAuthUser({ uid }))
