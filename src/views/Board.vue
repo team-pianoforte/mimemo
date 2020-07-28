@@ -22,7 +22,7 @@
 </template>
 
 <script>
-import { db, Timestamp } from '@/firebase'
+import { Timestamp, db, refKeys } from '@/firebase'
 import MemoBoard from '@/components/MemoBoard.vue'
 
 export default {
@@ -40,10 +40,10 @@ export default {
   }),
   computed: {
     boardRef() {
-      return db.collection('boards').doc(this.id)
+      return db.collection(refKeys.boards).doc(this.id)
     },
     memosRef() {
-      return this.boardRef.collection('memos')
+      return this.boardRef.collection(refKeys.memos)
     },
   },
   watch: {

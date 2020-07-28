@@ -26,3 +26,8 @@ firebase.analytics()
 export const db = firebase.firestore()
 export const auth = firebase.auth()
 export const Timestamp = firebase.firestore.Timestamp
+
+export const refKeys = {
+  boards: 'boards',
+  memos: 'memos',
+}
