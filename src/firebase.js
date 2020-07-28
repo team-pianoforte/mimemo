@@ -30,4 +30,5 @@ export const Timestamp = firebase.firestore.Timestamp
 export const refKeys = {
   boards: 'boards',
   memos: 'memos',
+  users: 'users',
 }
