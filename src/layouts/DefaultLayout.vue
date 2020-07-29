@@ -6,7 +6,7 @@
       app
       clipped
     >
-      <BoardMenu :id="$route.params.id" :boards="boards" />
+      <BoardMenu :id="$route.params.id" :boards="boards" @create-board="createBoard" />
     </v-navigation-drawer>
     <v-main>
       <v-container class="content">
@@ -17,7 +17,9 @@
 </template>
 
 <script>
-import { db } from '@/firebase'
+import { mapState } from 'vuex'
+import { firestore, db } from '@/firebase'
+import { hashPassword } from '@/lib/passwords'
 import Toolbar from '@/components/Toolbar.vue'
 import BoardMenu from '@/components/BoardMenu.vue'
 
@@ -28,8 +30,18 @@ export default {
     nav: false,
     boards: [],
   }),
+  computed: {
+    ...mapState('auth', ['user']),
+  },
   created() {
     this.$bind('boards', db.boards)
+  },
+  methods: {
+    async createBoard({ name, password }) {
+      const passwordHash = hashPassword(password)
+      const { boardId } = await db.boards.add({ name, passwordHash })
+      db.user(this.user.uid).update(firestore.FieldValue.arrayUnion(boardId))
+    },
   },
 }
 </script>

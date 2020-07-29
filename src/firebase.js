@@ -31,9 +31,11 @@ export const Timestamp = firebase.firestore.Timestamp
 const boards = firestore.collection('boards')
 const memos = (boardRef) => boardRef.collection('memos')
 const users = firestore.collection('users')
+const user = (uid) => users.doc(uid)
 
 export const db = {
   boards,
   memos,
   users,
+  user,
 }

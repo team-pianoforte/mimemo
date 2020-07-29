@@ -1,7 +1,7 @@
 <template>
   <v-dialog
-    :value="dialog"
-    @input="input"
+    :value="value"
+    @input="$emit('input', !dialog)"
     max-width="300"
   >
     <v-card>
@@ -19,7 +19,6 @@
             v-model="password"
             counter
             :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
-            :rules="[passwordRule]"
             :type="showPassword ? 'text' : 'password'"
             hint="共有する用パスワードです"
             @click:append="showPassword = !showPassword"
@@ -28,6 +27,7 @@
             class="mt-8"
             block
             color="primary"
+            @click="create"
           >
             作成
           </v-btn>
@@ -41,14 +41,10 @@
 export default {
   name: 'CreateBoardDialog',
   props: {
-    dialog: {
+    value: {
       type: Boolean,
       required: true,
     },
-  },
-  model: {
-    prop: 'dialog',
-    event: 'input',
   },
   data: () => ({
     name: '',
@@ -56,11 +52,9 @@ export default {
     showPassword: false,
   }),
   methods: {
-    passwordRule(v){
-      v.length >= 8 || '8文字以上にしてください'
-    },
-    input(v) {
-      console.log('input', v)
+    create() {
+      this.$emit('create', { name: this.name, password: this.password })
+      this.$emit('input', false)
     },
   },
 }

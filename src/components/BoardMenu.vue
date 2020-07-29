@@ -29,7 +29,7 @@
         ボードを追加
       </v-list-item-content>
     </v-list-item>
-    <CreateBoardDialog v-model="createBoardDialog" />
+    <CreateBoardDialog v-model="createBoardDialog" @create="createBoard" />
   </v-list>
 </template>
 
@@ -52,5 +52,10 @@ export default {
   data: () => ({
     createBoardDialog: false,
   }),
+  methods: {
+    createBoard({ name, password }) {
+      this.$emit('create-board', { name, password })
+    },
+  },
 }
 </script>
