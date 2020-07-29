@@ -6,7 +6,6 @@
       @change="updateMemo"
       @done="removeMemo"
     />
-    {{ memos }}
     <v-btn
       fixed
       fab
