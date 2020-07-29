@@ -1,0 +1,8 @@
+{
+  "name": "mimemo",
+  "shortname": "mimemo",
+  "description": "The most simple todo memo app",
+  "lang": "ja-jp",
+  "start_url": "/",
+  "display": "standalone"
+}
