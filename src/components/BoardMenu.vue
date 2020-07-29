@@ -21,7 +21,7 @@
       </v-list-item>
     </v-list-item-group>
     <v-divider />
-    <v-list-item @click="dialog = true">
+    <v-list-item @click="createBoardDialog = true">
       <v-list-item-action>
         <v-icon>mdi-plus</v-icon>
       </v-list-item-action>
@@ -29,47 +29,16 @@
         ボードを追加
       </v-list-item-content>
     </v-list-item>
-    <v-dialog
-      v-model="dialog"
-      max-width="300"
-    >
-      <v-card>
-        <v-card-title>ボードを追加</v-card-title>
-        <v-card-text>
-          <v-form>
-            <v-text-field
-              label="名前"
-              autofocus
-              v-model="name"
-              required
-            />
-            <v-text-field
-              label="共有用パスワード（任意）"
-              v-model="password"
-              counter
-              :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
-              :rules="[passwordRule]"
-              :type="showPassword ? 'text' : 'password'"
-              hint="共有する用パスワードです"
-              @click:append="showPassword = !showPassword"
-            />
-            <v-btn
-              class="mt-8"
-              block
-              color="primary"
-            >
-              作成
-            </v-btn>
-          </v-form>
-        </v-card-text>
-      </v-card>
-    </v-dialog>
+    <CreateBoardDialog v-model="createBoardDialog" />
   </v-list>
 </template>
 
 <script>
+import CreateBoardDialog from './CreateBoardDialog.vue'
+
 export default {
   name: 'BoardMenu',
+  components: { CreateBoardDialog },
   props: {
     id: {
       type: String,
@@ -81,15 +50,7 @@ export default {
     },
   },
   data: () => ({
-    dialog: false,
-    name: '',
-    password: '',
-    showPassword: false,
+    createBoardDialog: false,
   }),
-  methods: {
-    passwordRule(v){
-      v.length >= 8 || '8文字以上にしてください'
-    },
-  },
 }
 </script>
