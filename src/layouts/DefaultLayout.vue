@@ -6,7 +6,7 @@
       app
       clipped
     >
-      <BoardList :id="$route.params.id" :boards="boards" />
+      <BoardMenu :id="$route.params.id" :boards="boards" />
     </v-navigation-drawer>
     <v-main>
       <v-container class="content">
@@ -19,11 +19,11 @@
 <script>
 import { db } from '@/firebase'
 import Toolbar from '@/components/Toolbar.vue'
-import BoardList from '@/components/BoardList.vue'
+import BoardMenu from '@/components/BoardMenu.vue'
 
 export default {
   name: 'DefaultLayout',
-  components: { Toolbar, BoardList },
+  components: { Toolbar, BoardMenu },
   data: () => ({
     nav: false,
     boards: [],
