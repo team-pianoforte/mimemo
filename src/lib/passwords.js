@@ -3,7 +3,7 @@ import sha256 from 'sha256'
 const stretchCount = 10
 
 export function hashPassword(password) {
-  if (password === '') {
+  if (!password) {
     return ''
   }
   let hash = password
@@ -14,8 +14,8 @@ export function hashPassword(password) {
 }
 
 export function verifyPassword(password, hash) {
-  if (hash === '') {
+  if (!(hash || password)) {
     return true
   }
-  return hashPassword(hash) === hash
+  return hashPassword(password) === hash
 }
