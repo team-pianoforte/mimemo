@@ -1,7 +1,7 @@
 <template>
   <v-dialog
     :value="value"
-    @input="$emit('input', !dialog)"
+    @input="$emit('input', !value)"
     max-width="300"
   >
     <v-card>
