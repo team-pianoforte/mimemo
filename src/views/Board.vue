@@ -19,16 +19,43 @@
         <v-icon>mdi-clipboard-plus-outline</v-icon>
       </v-btn>
     </template>
+    <v-dialog
+      v-model="passwordDialog"
+      max-width="300"
+    >
+      <v-card>
+        <v-card-title>
+          ボードに参加
+        </v-card-title>
+        <v-card-text>
+          <PasswordField
+            label="パスワード"
+            hint="ボードのパスワードを入力してください"
+            v-model="password"
+          />
+          <v-btn
+            block
+            color="primary"
+            @click="joinToBoard"
+          >
+            参加する
+          </v-btn>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 
 <script>
 import { Timestamp, db, auth } from '@/firebase'
+import PasswordField from '@/components/PasswordField.vue'
 import MemoBoard from '@/components/MemoBoard.vue'
+
+/* eslint-disable */
 
 export default {
   name: 'Board',
-  components: { MemoBoard },
+  components: { MemoBoard, PasswordField },
   props: {
     id: {
       type: String,
@@ -36,9 +63,12 @@ export default {
     },
   },
   data: () => ({
+    user: null,
     board: null,
     memos: [],
-    authenticated: false,
+    authenticated: undefined,
+    passwordDialog: false,
+    password: '',
   }),
   computed: {
     boardRef() {
@@ -49,16 +79,22 @@ export default {
     },
   },
   async created() {
-    auth.onAuthStateChanged(this.authenticate)
     this.bind()
+    auth.onAuthStateChanged(this.authenticate)
   },
   methods: {
     async authenticate(user) {
+      await this.$bind('user', db.user(user.uid))
       if ((await db.userBoardIds(user.uid)).includes(this.id)) {
         this.authenticated = true
+        this.passwordDialog = false
       } else {
         this.authenticated = false
+        this.passwordDialog = true
       }
+    },
+    async joinToBoard(password) {
+      this.user.update(firestore.FieldValue.arrayUnion(boardId))
     },
     async clickCreateButton() {
       await this.createMemo({ text: 'メモ: ' })
