@@ -14,14 +14,11 @@
             v-model="name"
             required
           />
-          <v-text-field
+          <PasswordField
             label="共有用パスワード（任意）"
             v-model="password"
             counter
-            :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
-            :type="showPassword ? 'text' : 'password'"
             hint="共有する用パスワードです"
-            @click:append="showPassword = !showPassword"
           />
           <v-btn
             class="mt-8"
@@ -38,8 +35,11 @@
 </template>
 
 <script>
+import PasswordField from './PasswordField'
+
 export default {
   name: 'CreateBoardDialog',
+  components: { PasswordField },
   props: {
     value: {
       type: Boolean,
@@ -49,7 +49,6 @@ export default {
   data: () => ({
     name: '',
     password: '',
-    showPassword: false,
   }),
   methods: {
     create() {
