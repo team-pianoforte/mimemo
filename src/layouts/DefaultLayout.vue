@@ -17,8 +17,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
-import { firestore, db } from '@/firebase'
+import { firestore, db, auth } from '@/firebase'
 import { hashPassword } from '@/lib/passwords'
 import Toolbar from '@/components/Toolbar.vue'
 import BoardMenu from '@/components/BoardMenu.vue'
@@ -29,18 +28,25 @@ export default {
   data: () => ({
     nav: false,
     boards: [],
+    uid: null,
   }),
-  computed: {
-    ...mapState('auth', ['user']),
-  },
-  created() {
-    this.$bind('boards', db.boards)
+  async created() {
+    auth.onAuthStateChanged(async (user) => {
+      this.userChanged(user)
+    })
+
+    console.log(auth.currentUser)
+    await auth.signInAnonymously()
   },
   methods: {
+    async userChanged(user) {
+      this.uid = user.uid
+      this.$bind('boards', await db.userBoards(user.uid))
+    },
     async createBoard({ name, password }) {
       const passwordHash = hashPassword(password)
       const { boardId } = await db.boards.add({ name, passwordHash })
-      db.user(this.user.uid).update(firestore.FieldValue.arrayUnion(boardId))
+      db.user(this.uid).update(firestore.FieldValue.arrayUnion(boardId))
     },
   },
 }

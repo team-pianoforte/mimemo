@@ -32,10 +32,14 @@ const boards = firestore.collection('boards')
 const memos = (boardRef) => boardRef.collection('memos')
 const users = firestore.collection('users')
 const user = (uid) => users.doc(uid)
+const userBoardIds = async (uid) => await user(uid).get().then((doc) => doc.data().boardIds)
+const userBoards = async (uid) => boards.where('id', 'in', await userBoardIds(uid))
 
 export const db = {
   boards,
   memos,
   users,
   user,
+  userBoardIds,
+  userBoards,
 }
