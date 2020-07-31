@@ -1,27 +1,29 @@
 <template>
   <div>
-    <MemoBoard
-      :board="board"
-      :memos="memos"
-      @change="updateMemo"
-      @done="removeMemo"
-    />
-    <v-btn
-      fixed
-      fab
-      right
-      bottom
-      color="primary"
-      class="mb-8 mr-8"
-      @click="clickCreateButton"
-    >
-      <v-icon>mdi-clipboard-plus-outline</v-icon>
-    </v-btn>
+    <template v-if="authenticated">
+      <MemoBoard
+        :board="board"
+        :memos="memos"
+        @change="updateMemo"
+        @done="removeMemo"
+      />
+      <v-btn
+        fixed
+        fab
+        right
+        bottom
+        color="primary"
+        class="mb-8 mr-8"
+        @click="clickCreateButton"
+      >
+        <v-icon>mdi-clipboard-plus-outline</v-icon>
+      </v-btn>
+    </template>
   </div>
 </template>
 
 <script>
-import { Timestamp, db } from '@/firebase'
+import { Timestamp, db, auth } from '@/firebase'
 import MemoBoard from '@/components/MemoBoard.vue'
 
 export default {
@@ -36,6 +38,7 @@ export default {
   data: () => ({
     board: null,
     memos: [],
+    authenticated: false,
   }),
   computed: {
     boardRef() {
@@ -45,17 +48,22 @@ export default {
       return db.memos(this.boardRef)
     },
   },
-  watch: {
-    id() { this.rebind() },
-  },
   async created() {
-    this.rebind()
+    auth.onAuthStateChanged(this.authenticate)
+    this.bind()
   },
   methods: {
+    async authenticate(user) {
+      if ((await db.userBoardIds(user.uid)).includes(this.id)) {
+        this.authenticated = true
+      } else {
+        this.authenticated = false
+      }
+    },
     async clickCreateButton() {
       await this.createMemo({ text: 'メモ: ' })
     },
-    async rebind() {
+    async bind() {
       await this.$bind('board', this.boardRef)
       await this.$bind('memos', this.memosRef)
     },
