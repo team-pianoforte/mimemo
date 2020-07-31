@@ -26,7 +26,7 @@ firebase.analytics()
 export const firestore = firebase.firestore()
 export const auth = firebase.auth()
 export const Timestamp = firebase.firestore.Timestamp
-
+export const FieldValue = firebase.firestore.FieldValue
 
 const boards = firestore.collection('boards')
 const memos = (boardRef) => boardRef.collection('memos')
@@ -34,6 +34,8 @@ const users = firestore.collection('users')
 const user = (uid) => users.doc(uid)
 const userBoardIds = async (uid) => await user(uid).get().then((doc) => doc.data().boardIds)
 const userBoards = async (uid) => boards.where('id', 'in', await userBoardIds(uid))
+const addBoardToUser = async (uid, boardId) =>
+  await user(uid).update({ boardIds: FieldValue.arrayUnion(boardId) })
 
 export const db = {
   boards,
@@ -42,4 +44,5 @@ export const db = {
   user,
   userBoardIds,
   userBoards,
+  addBoardToUser,
 }

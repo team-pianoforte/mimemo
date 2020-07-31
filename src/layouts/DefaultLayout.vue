@@ -17,7 +17,7 @@
 </template>
 
 <script>
-import { firestore, db, auth } from '@/firebase'
+import { db, auth } from '@/firebase'
 import { hashPassword } from '@/lib/passwords'
 import Toolbar from '@/components/Toolbar.vue'
 import BoardMenu from '@/components/BoardMenu.vue'
@@ -45,8 +45,11 @@ export default {
     },
     async createBoard({ name, password }) {
       const passwordHash = hashPassword(password)
-      const { boardId } = await db.boards.add({ name, passwordHash })
-      db.user(this.uid).update(firestore.FieldValue.arrayUnion(boardId))
+      const ref = await db.boards.add({ name, passwordHash })
+      const id = (await ref.get()).id
+      await db.boards.doc(id).update({ id })
+      await db.addBoardToUser(this.uid, id)
+      await this.userChanged(auth.currentUser)
     },
   },
 }
