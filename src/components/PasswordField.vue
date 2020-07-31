@@ -3,7 +3,7 @@
     :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
     :type="showPassword ? 'text' : 'password'"
     :value="value"
-    @input="$emit('input', value)"
+    @input="$emit('input', $event)"
     @click:append="showPassword = !showPassword"
     v-bind="$attrs"
   />
@@ -15,7 +15,7 @@ export default {
   props: {
     value: {
       type: String,
-      default: '',
+      required: true,
     },
   },
   data: () => ({
