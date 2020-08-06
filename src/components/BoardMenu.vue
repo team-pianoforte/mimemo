@@ -1,0 +1,59 @@
+<template>
+  <v-list>
+    <v-subheader>Boards</v-subheader>
+    <v-list-item-group>
+      <v-list-item
+        v-for="board in boards"
+        :key="board.objectId"
+        nuxt
+        :to="'/' + board.objectId"
+        :inactive="board.objectId === id"
+        nav
+      >
+        <v-list-item-content>
+          {{ board.name }}
+        </v-list-item-content>
+      </v-list-item>
+    </v-list-item-group>
+    <v-divider />
+    <v-list-item @click="createBoardDialog = true">
+      <v-list-item-action>
+        <v-icon>mdi-plus</v-icon>
+      </v-list-item-action>
+      <v-list-item-content>
+        ボードを追加
+      </v-list-item-content>
+    </v-list-item>
+    <CreateBoardDialog
+      v-model="createBoardDialog"
+      @create="createBoard"
+    />
+  </v-list>
+</template>
+
+<script>
+import CreateBoardDialog from './CreateBoardDialog.vue'
+
+export default {
+  name: 'BoardMenu',
+  components: { CreateBoardDialog },
+  props: {
+    id: {
+      type: String,
+      default: '',
+    },
+    boards: {
+      type: Array,
+      required: true,
+    },
+  },
+  data: () => ({
+    createBoardDialog: false,
+  }),
+  methods: {
+    createBoard({ name, password }) {
+      this.$emit('create-board', { name, password })
+    },
+  },
+}
+</script>
