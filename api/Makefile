@@ -4,3 +4,6 @@ dev:
 
 deploy:
 	gcloud app deploy  --projectId=${GCLOUD_PROJECT_ID}
+
+watch:
+	looper
