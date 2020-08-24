@@ -14,12 +14,14 @@ type User struct {
 	Key       *datastore.Key `gae:"$key"`
 	BoardKeys []*datastore.Key
 	UID       string
+	ctx       context.Context `gae:"-"`
 }
 
 func NewUser(ctx context.Context, uid string) *User {
 	return &User{
 		Key: datastore.NewKey(ctx, userKind, uid, 0, nil),
 		UID: uid,
+		ctx: ctx,
 	}
 }
 
@@ -29,23 +31,23 @@ func GetUser(ctx context.Context, uid string) (*User, error) {
 	return u, err
 }
 
-func (u *User) Save(ctx context.Context) error {
-	return datastore.Put(ctx, u)
+func (u *User) Save() error {
+	return datastore.Put(u.ctx, u)
 }
 
-func (u *User) GetBoards(ctx context.Context) (boards []*Board, err error) {
+func (u *User) GetBoards() (boards []*Board, err error) {
 	keys := make([]*datastore.Key, len(u.BoardKeys))
 	for i, v := range u.BoardKeys {
 		keys[i] = v
 	}
 	q := datastore.NewQuery(boardKind) //.Eq("Name", "b1")
-	err = datastore.GetAll(ctx, q, &boards)
+	err = datastore.GetAll(u.ctx, q, &boards)
 
 	boards = make([]*Board, len(u.BoardKeys))
 	for i, k := range u.BoardKeys {
-		boards[i] = NewBoard(ctx, k.IntID(), "")
+		boards[i] = NewBoard(u.ctx, k.IntID(), "")
 	}
-	err = datastore.Get(ctx, boards)
+	err = datastore.Get(u.ctx, boards)
 
 	return
 }

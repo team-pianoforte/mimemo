@@ -26,7 +26,7 @@ func TestSaveAndGetBoard(t *testing.T) {
 
 	// Save
 	assert.Empty(t, b1.Key)
-	assert.NoError(t, b1.Save(testCtx))
+	assert.NoError(t, b1.Save())
 	assert.NotEmpty(t, b1.Key)
 
 	// Get
@@ -39,7 +39,7 @@ func TestSaveAndGetBoard(t *testing.T) {
 	// And and Update Memo
 	b2.Memos = append([]Memo{*NewMemo("memo0")}, b2.Memos...)
 	b2.Memos[1].Text = "memo1"
-	assert.NoError(t, b2.Save(testCtx))
+	assert.NoError(t, b2.Save())
 
 	b3, err := GetBoard(testCtx, b1.Key.IntID())
 	assert.NoError(t, err)

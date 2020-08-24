@@ -15,6 +15,7 @@ type Board struct {
 	Name  string
 	Index int
 	Memos []Memo
+	ctx   context.Context `gae:"-"`
 }
 
 type Memo struct {
@@ -25,6 +26,7 @@ type Memo struct {
 func NewBoard(ctx context.Context, id int64, name string) (b *Board) {
 	b = &Board{
 		Name: name,
+		ctx:  ctx,
 	}
 	if id == 0 {
 		b.Key = nil
@@ -47,9 +49,9 @@ func GetBoard(ctx context.Context, id int64) (*Board, error) {
 	return b, nil
 }
 
-func (b *Board) Save(ctx context.Context) error {
+func (b *Board) Save() error {
 	if b.Key == nil {
-		b.Key = datastore.NewIncompleteKeys(ctx, 1, boardKind, nil)[0]
+		b.Key = datastore.NewIncompleteKeys(b.ctx, 1, boardKind, nil)[0]
 	}
-	return datastore.Put(ctx, b)
+	return datastore.Put(b.ctx, b)
 }
