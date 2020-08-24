@@ -7,3 +7,6 @@ deploy:
 
 watch:
 	looper
+
+clean:
+	go clean -testcache -cache
