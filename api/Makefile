@@ -8,5 +8,8 @@ deploy:
 watch:
 	looper
 
+test:
+	go test ./...
+
 clean:
 	go clean -testcache -cache
