@@ -21,7 +21,7 @@ func TestMain(m *testing.M) {
 }
 
 func TestSaveAndGetBoard(t *testing.T) {
-	b1 := NewBoard(nil, "name")
+	b1 := NewBoard(testCtx, 0, "name")
 	b1.Memos = append(b1.Memos, *NewMemo("memo"))
 
 	// Save
@@ -30,7 +30,7 @@ func TestSaveAndGetBoard(t *testing.T) {
 	assert.NotEmpty(t, b1.Key)
 
 	// Get
-	b2, err := GetBoard(testCtx, b1.Key)
+	b2, err := GetBoard(testCtx, b1.Key.IntID())
 	assert.NoError(t, err)
 	assert.Equal(t, 1, len(b2.Memos))
 	assert.Equal(t, "memo", b2.Memos[0].Text)
@@ -41,7 +41,7 @@ func TestSaveAndGetBoard(t *testing.T) {
 	b2.Memos[1].Text = "memo1"
 	assert.NoError(t, b2.Save(testCtx))
 
-	b3, err := GetBoard(testCtx, b1.Key)
+	b3, err := GetBoard(testCtx, b1.Key.IntID())
 	assert.NoError(t, err)
 	assert.Equal(t, 2, len(b3.Memos))
 	assert.Equal(t, "memo0", b3.Memos[0].Text)

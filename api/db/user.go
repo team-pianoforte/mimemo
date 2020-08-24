@@ -16,16 +16,17 @@ type User struct {
 	UID       string
 }
 
-func NewUser(uid string) *User {
-	return &User{UID: uid}
+func NewUser(ctx context.Context, uid string) *User {
+	return &User{
+		Key: datastore.NewKey(ctx, userKind, uid, 0, nil),
+		UID: uid,
+	}
 }
 
-func GetUser(ctx context.Context, key *datastore.Key) (*User, error) {
-	u := &User{Key: key}
-	if err := datastore.Get(ctx, u); err != nil {
-		return nil, err
-	}
-	return u, nil
+func GetUser(ctx context.Context, uid string) (*User, error) {
+	u := NewUser(ctx, uid)
+	err := datastore.Get(ctx, u)
+	return u, err
 }
 
 func (u *User) Save(ctx context.Context) error {
@@ -42,7 +43,7 @@ func (u *User) GetBoards(ctx context.Context) (boards []*Board, err error) {
 
 	boards = make([]*Board, len(u.BoardKeys))
 	for i, k := range u.BoardKeys {
-		boards[i] = NewBoard(k, "")
+		boards[i] = NewBoard(ctx, k.IntID(), "")
 	}
 	err = datastore.Get(ctx, boards)
 

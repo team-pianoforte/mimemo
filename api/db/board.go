@@ -22,19 +22,24 @@ type Memo struct {
 	Index int
 }
 
-func NewBoard(key *datastore.Key, name string) *Board {
-	return &Board{
-		Key:  key,
+func NewBoard(ctx context.Context, id int64, name string) (b *Board) {
+	b = &Board{
 		Name: name,
 	}
+	if id == 0 {
+		b.Key = nil
+	} else {
+		b.Key = datastore.NewKey(ctx, boardKind, "", id, nil)
+	}
+	return
 }
 
 func NewMemo(text string) *Memo {
 	return &Memo{Text: text}
 }
 
-func GetBoard(ctx context.Context, key *datastore.Key) (*Board, error) {
-	b := NewBoard(key, "")
+func GetBoard(ctx context.Context, id int64) (*Board, error) {
+	b := NewBoard(ctx, id, "")
 	if err := datastore.Get(ctx, b); err != nil {
 		return nil, err
 	}
