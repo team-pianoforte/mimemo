@@ -11,10 +11,10 @@ const (
 )
 
 type User struct {
-	Key       *datastore.Key `gae:"$key"`
-	BoardKeys []*datastore.Key
-	UID       string
-	ctx       context.Context `gae:"-"`
+	Key       *datastore.Key   `gae:"$key" json:""`
+	BoardKeys []*datastore.Key `json:""`
+	UID       string           `json:"uid"`
+	ctx       context.Context  `gae:"-"`
 }
 
 func NewUser(ctx context.Context, uid string) *User {

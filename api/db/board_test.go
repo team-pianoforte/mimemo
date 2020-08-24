@@ -35,6 +35,7 @@ func TestSaveAndGetBoard(t *testing.T) {
 	assert.Equal(t, 1, len(b2.Memos))
 	assert.Equal(t, "memo", b2.Memos[0].Text)
 	assert.Equal(t, b1.Name, b2.Name)
+	assert.Equal(t, b2.Key.IntID(), b2.ID)
 
 	// And and Update Memo
 	b2.Memos = append([]Memo{*NewMemo("memo0")}, b2.Memos...)

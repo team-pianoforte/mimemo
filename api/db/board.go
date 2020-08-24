@@ -11,22 +11,25 @@ const (
 )
 
 type Board struct {
-	Key   *datastore.Key `gae:"$key"`
-	Name  string
-	Index int
-	Memos []Memo
-	ctx   context.Context `gae:"-"`
+	Key   *datastore.Key  `gae:"$key" json:"-"`
+	ID    int64           `gae:"$id" json:"id"`
+	Name  string          `json:"name"`
+	Index int             `json:"index"`
+	Memos []Memo          `json:"memos"`
+	ctx   context.Context `gae:"-" json:"-"`
 }
 
 type Memo struct {
-	Text  string
-	Index int
+	Text  string `json:"text"`
+	Index int    `json:"index"`
 }
 
 func NewBoard(ctx context.Context, id int64, name string) (b *Board) {
 	b = &Board{
-		Name: name,
-		ctx:  ctx,
+		Name:  name,
+		ctx:   ctx,
+		ID:    id,
+		Memos: make([]Memo, 0),
 	}
 	if id == 0 {
 		b.Key = nil
@@ -45,6 +48,7 @@ func GetBoard(ctx context.Context, id int64) (*Board, error) {
 	if err := datastore.Get(ctx, b); err != nil {
 		return nil, err
 	}
+	//b.ID = id
 
 	return b, nil
 }
