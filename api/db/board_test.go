@@ -5,9 +5,9 @@ import (
 	"os"
 	"testing"
 
-	"github.com/luci/gae/impl/memory"
 	"github.com/stretchr/testify/assert"
-	"go.chromium.org/gae/service/datastore"
+	"go.chromium.org/luci/gae/impl/memory"
+	"go.chromium.org/luci/gae/service/datastore"
 )
 
 var testCtx context.Context
