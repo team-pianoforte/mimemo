@@ -3,8 +3,10 @@ package api
 import (
 	"net/http"
 	"net/http/httptest"
+	"strings"
 	"testing"
 
+	"github.com/labstack/echo"
 	"github.com/stretchr/testify/assert"
 	"github.com/team-pianoforte/mimemo2/api/db"
 	"go.chromium.org/luci/gae/service/datastore"
@@ -41,7 +43,6 @@ func TestGetBoards(t *testing.T) {
 }
 
 func TestGetBoards404(t *testing.T) {
-
 	req := httptest.NewRequest(http.MethodGet, "/", nil)
 	rec := httptest.NewRecorder()
 	ctx := e.NewContext(req, rec)
@@ -52,4 +53,27 @@ func TestGetBoards404(t *testing.T) {
 
 	assert.NoError(t, getBoards(ctx))
 	assert.Equal(t, http.StatusNotFound, rec.Code)
+}
+
+func TestCreateBoards(t *testing.T) {
+	u := db.NewUser(AppEngineContext, "uid")
+	assert.NoError(t, u.Save())
+
+	req := httptest.NewRequest(http.MethodPost, "/", strings.NewReader(`
+    { "name": "board", "index": 0, "memos": [ { "text": "memo", "index": 0 } ] }
+  `))
+	req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
+	rec := httptest.NewRecorder()
+	ctx := e.NewContext(req, rec)
+
+	ctx.SetPath("/users/:uid/boards")
+	ctx.SetParamNames("uid")
+	ctx.SetParamValues("uid")
+
+	assert.NoError(t, createBoard(ctx))
+	assert.Equal(t, http.StatusCreated, rec.Code)
+	assert.JSONEq(t,
+		`{ "id": 0, "name": "board", "index": 0, "memos": [ { "text": "memo", "index": 0 } ] }`,
+		rec.Body.String(),
+	)
 }
